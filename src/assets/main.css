@@ -46,21 +46,41 @@ form .list-button{
 .btn-primary{
   display: inline-block;
   background-color: hsl(212, 90%, 50%);
-  color: white;
+  color: #E5E5E5;
   border-radius: 5px;
   border: none;
   padding: 5px 10px; 
   font-size: 16px;
   cursor: pointer;
 }
+.btn-primary:hover{
+  background-color: hsl(212, 90%, 40%);
+}
 
 .btn-secondary{
   display: inline-block;
   background-color: hsl(212, 90%, 20%);
-  color: white;
+  color: #E5E5E5;
   border-radius: 5px;
   border: none;
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
+}
+.btn-secondary:hover{
+  background-color: hsl(212, 40%, 20%);
+}
+
+.btn-danger{
+  display: inline-block;
+  background-color: hsl(0, 100%, 40%);
+  color: #E5E5E5;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn-danger:hover{
+  background-color: hsl(0, 100%, 30%);
 }
