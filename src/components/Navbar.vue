@@ -18,7 +18,7 @@ const user = useUserStore();
         <RouterLink to="/register">Inscription</RouterLink>
       </template>
       <template v-if="user.isConnected">
-        <RouterLink to="/">Profil</RouterLink>
+        <RouterLink to="/profile">Profil</RouterLink>
         <RouterLink to="/logout">Déconnexion</RouterLink>
       </template>
     </div>
