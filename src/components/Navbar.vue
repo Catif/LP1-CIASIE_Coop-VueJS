@@ -6,6 +6,10 @@ const user = useUserStore();
   <nav>
     <div>
       <RouterLink to="/">Accueil</RouterLink>
+      <template v-if="user.isConnected">
+        <RouterLink to="/members">Membres</RouterLink>
+        <RouterLink to="/">Conversations</RouterLink>
+      </template>
     </div>
 
     <div>
@@ -14,6 +18,7 @@ const user = useUserStore();
         <RouterLink to="/register">Inscription</RouterLink>
       </template>
       <template v-if="user.isConnected">
+        <RouterLink to="/">Profil</RouterLink>
         <RouterLink to="/logout">Déconnexion</RouterLink>
       </template>
     </div>
