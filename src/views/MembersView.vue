@@ -8,7 +8,7 @@ const Session = useSessionStore();
 let listMembers = ref([]);
 
 let deleteMember = (id, index) => {
-  if (Session.data.member.id != id){
+  if (Session.data.member.id != id) {
     if (confirm("Voulez-vous vraiment supprimer ce membre ?")) {
       api
         .delete(`members/${id}`, { body: { token: Session.data.token } })
@@ -17,15 +17,13 @@ let deleteMember = (id, index) => {
         });
     }
   } else {
-    alert('Mais... C\'est vous !')
+    alert("Mais... C'est vous !");
   }
 };
 
-onMounted(() => {
-  api.get("members").then((data) => {
-    listMembers.value = data;
-    console.log(listMembers.value);
-  });
+api.get("members").then((data) => {
+  listMembers.value = data;
+  console.log(listMembers.value);
 });
 </script>
 
