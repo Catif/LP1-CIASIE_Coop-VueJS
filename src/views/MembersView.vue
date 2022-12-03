@@ -24,7 +24,6 @@ let deleteMember = (id, index) => {
     alert("Mais... C'est vous !");
   }
 };
-
 </script>
 
 <template>

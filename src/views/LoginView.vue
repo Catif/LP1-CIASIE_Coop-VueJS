@@ -1,5 +1,4 @@
 <script setup>
-import Alert from '@/components/Alert.vue'
 import {useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/user'
 import {useSessionStore} from '@/stores/session'
