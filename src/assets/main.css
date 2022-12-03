@@ -33,6 +33,7 @@ form .form-group{
   gap: 5px;
 }
 form .form-group input{
+  padding: 3px 10px;
   border-radius: 5px;
   border: 1px solid hsl(212, 90%, 20%);
 }
