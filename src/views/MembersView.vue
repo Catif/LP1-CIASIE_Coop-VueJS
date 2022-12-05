@@ -7,6 +7,10 @@ const Session = useSessionStore();
 
 let listMembers = ref([]);
 
+api.get("members").then((data) => {
+  listMembers.value = data;
+});
+
 let deleteMember = (id, index) => {
   if (Session.data.member.id != id) {
     if (confirm("Voulez-vous vraiment supprimer ce membre ?")) {
@@ -20,11 +24,6 @@ let deleteMember = (id, index) => {
     alert("Mais... C'est vous !");
   }
 };
-
-api.get("members").then((data) => {
-  listMembers.value = data;
-  console.log(listMembers.value);
-});
 </script>
 
 <template>
@@ -41,7 +40,9 @@ api.get("members").then((data) => {
             <p class="email">{{ member.email }}</p>
           </div>
           <div class="buttons">
-            <button class="btn-primary">Voir</button>
+            <RouterLink class="btn-primary" :to="'/profile/' + member.id"
+              >Voir</RouterLink
+            >
             <button class="btn-danger" @click="deleteMember(member.id, index)">
               X
             </button>
