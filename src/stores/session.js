@@ -20,21 +20,20 @@ export const useSessionStore = defineStore(
     }
 
     async function isValid() {
-      console.log("avant le if:", data.token);
       if (data.token) {
-        console.log("dans le if:", data.token);
         const memberId = data.member.id;
 
-        const response = await api.get(
+        return await api.get(
           `members/${memberId}/signedin?token=${data.token}`
-        );
-        const data = await response;
+        ).then(dataResponse => {
+          if (dataResponse.token) {
+            return true
+          } else {
+            emptySession()
+            return false
+          }
+        });
 
-        if (!data.token) {
-          return false;
-        }
-
-        return true;
       } else {
         return false;
       }

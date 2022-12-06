@@ -1,8 +1,5 @@
 <script setup>
-import { useUserStore } from "@/stores/user";
-
 const router = inject('router');
-const User = useUserStore();
 const Session = inject('session');
 
 const information = reactive({
@@ -25,7 +22,7 @@ const createConv = () => {
 
 <template>
   <div>
-    <Alert v-if="error" :type="'error'" :message="error" />
+    <Alert v-if="error" type="error" :message="error" />
 
     <h1>Création d'une conversation</h1>
 

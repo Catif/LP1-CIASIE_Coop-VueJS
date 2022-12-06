@@ -45,7 +45,7 @@ const deleteMember = (id, index) => {
               >Voir</RouterLink
             >
             <button class="btn-danger" @click="deleteMember(member.id, index)">
-              X
+              <icon-Trash />
             </button>
           </div>
         </div>

@@ -44,8 +44,7 @@ const router = createRouter({
     {
       path: "/create-conversation",
       name: "create-conversation",
-      component: () =>
-        import("@/views/conversation/CreateConversationView.vue"),
+      component: () => import("@/views/conversation/CreateConversationView.vue"),
     },
     {
       path: "/profile/:id?",
@@ -59,11 +58,10 @@ const router = createRouter({
 router.beforeEach(async (from, to, next) => {
   const Session = useSessionStore();
 
-  if (!["/", "/register", "/login"].includes(from.path) && !Session.isValid()) {
-    next({ name: "login" })
-  } else {
-    next()
+  if ((!["/", "/register", "/login"].includes(to.path) || !["/", "/register", "/login"].includes(from.path)) && !(await Session.isValid())) {
+    next('/login')
   }
+  next()
 });
 
 export default router;

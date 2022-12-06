@@ -41,10 +41,10 @@ const deleteConv = (id) => {
           </div>
           <div class="buttons">
             <router-link class="btn-primary" :to="'/conversation/' + conv.id"
-              >Voir</router-link
+              >Ouvrir</router-link
             >
             <button class="btn-danger" @click="deleteConv(conv.id, index)">
-              X
+              <icon-Trash />
             </button>
           </div>
         </div>

@@ -1,23 +1,23 @@
 <script setup>
-const user = useUserStore();
+const Session = inject('session');
 </script>
 
 <template>
   <nav>
     <div>
       <router-link to="/">Accueil</router-link>
-      <template v-if="user.isConnected">
+      <template v-if="Session.data.token">
         <router-link to="/members">Membres</router-link>
         <router-link to="/conversations">Conversations</router-link>
       </template>
     </div>
 
     <div>
-      <template v-if="!user.isConnected">
+      <template v-if="!Session.data.token">
         <router-link to="/login">Connexion</router-link>
         <router-link to="/register">Inscription</router-link>
       </template>
-      <template v-if="user.isConnected">
+      <template v-if="Session.data.token">
         <router-link to="/profile">Profil</router-link>
         <router-link to="/logout">Déconnexion</router-link>
       </template>

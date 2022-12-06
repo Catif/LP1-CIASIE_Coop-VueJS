@@ -54,8 +54,8 @@ let togglePassword = () => {
           <input v-if="!showPassword" type="password" v-model="member.password" require>
           <input v-else type="text" v-model="member.password" require>
           <button type="button" @click="togglePassword">
-              <ClosedEye v-if="!showPassword" />
-              <OpenEye v-else />
+              <icon-ClosedEye v-if="!showPassword" />
+              <icon-OpenEye v-else />
           </button>
         </div>
       </div>
