@@ -1,12 +1,10 @@
 <script setup>
-import {useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/user'
-import {useSessionStore} from '@/stores/session'
 
-const router = useRouter();
+const router = inject('router');
 
 const User = useUserStore();
-const Session = useSessionStore();
+const Session = inject('session');
 
 
 const information = reactive({

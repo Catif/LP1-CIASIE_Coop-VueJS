@@ -1,23 +1,24 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { useSessionStore } from "@/stores/session";
+const Session = inject('session');
 
-const Router = useRouter();
-const Session = useSessionStore();
+const listMembers = ref([]);
+const message = ref('Chargement...')
 
-let listMembers = ref([]);
-
-api.get("members").then((data) => {
-  listMembers.value = data;
+api.get("members?token=" + Session.data.token).then((data) => {
+  if (data.length === 0){
+    message.value = 'Il n\'existe aucune membre'
+  } else {
+    listMembers.value = data;
+  }
 });
 
-let deleteMember = (id, index) => {
+const deleteMember = (id, index) => {
   if (Session.data.member.id != id) {
     if (confirm("Voulez-vous vraiment supprimer ce membre ?")) {
       api
         .delete(`members/${id}`, { body: { token: Session.data.token } })
         .then((data) => {
-          listMembers.value.splice(index, 1);
+          listMembers.value.splice(listMembers.value.findIndex(element => element.id === id), 1);
         });
     }
   } else {
@@ -50,7 +51,7 @@ let deleteMember = (id, index) => {
         </div>
       </template>
       <template v-else>
-        <p>Chargement...</p>
+        <p>{{message}}</p>
       </template>
     </div>
   </div>
@@ -65,7 +66,7 @@ $background-color: hsl(231, 100%, 10%);
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  margin-top: 10px;
+  margin-top: 20px;
 
   .member {
     width: 100%;

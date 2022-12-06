@@ -1,9 +1,6 @@
 <script setup>
-import { useRoute } from "vue-router";
-import { useSessionStore } from "@/stores/session";
-
-const Route = useRoute();
-const Session = useSessionStore();
+const Route = inject('route');
+const Session = inject('session');
 
 const member = ref(false);
 
