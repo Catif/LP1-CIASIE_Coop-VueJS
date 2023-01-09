@@ -6,6 +6,7 @@ const Session = inject("session");
 const conversation = reactive({
   channel: {},
   messages: [],
+  members: [],
 });
 const information = reactive({
   member_id: Session.data.member.id,
@@ -14,38 +15,45 @@ const information = reactive({
 const message = ref("Chargement...");
 const error = ref("");
 
-function chargerChannel() {
-  api
-    .get(`channels/${route.params.id}?token=${Session.data.token}`)
-    .then((data) => {
-      if (data) {
-        conversation.channel = data;
-      } else {
-        router.push({ name: "conversations" });
-      }
-    });
+function loadChannel() {
+  api.get(`channels/${route.params.id}?token=${Session.data.token}`).then((data) => {
+    if (data) {
+      conversation.channel = data;
+    } else {
+      router.push({ name: "conversations" });
+    }
+  });
 }
-function chargerMessages() {
-  api
-    .get(`channels/${route.params.id}/posts?token=${Session.data.token}`)
-    .then((data) => {
-      if (data.length) {
-        data.reverse();
-        data.map((el) => {
-          el.date = new Date(el.created_at).toLocaleTimeString("fr-FR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
+function loadMessages() {
+  api.get(`channels/${route.params.id}/posts?token=${Session.data.token}`).then((data) => {
+    if (data.length) {
+      data.reverse();
+      data.map((el) => {
+        el.member = conversation.members.find((member) => member.id == el.member_id);
+        el.date = new Date(el.created_at).toLocaleTimeString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
         });
-        conversation.messages = data;
-      } else {
-        message.value = "Aucune message pour le moment.";
-      }
-    });
+        el.edit = false;
+        el.messageEdited = el.message;
+      });
+      conversation.messages = data;
+    } else {
+      message.value = "Aucune message pour le moment.";
+    }
+  });
+}
+
+function loadMembers() {
+  return api.get(`members?token=${Session.data.token}`).then((data) => {
+    if (data.length) {
+      conversation.members = data;
+    }
+  });
 }
 
 function postMessage() {
@@ -55,7 +63,7 @@ function postMessage() {
         body: information,
       })
       .then((data) => {
-        chargerMessages();
+        loadMessages();
       });
     information.message = "";
   } else {
@@ -63,17 +71,48 @@ function postMessage() {
   }
 }
 
-function deleteMessage(idMessage){
-  if (confirm("Voulez-vous vraiment supprimer ce message ?")){
-    api.delete(`channels/${route.params.id}/posts/${idMessage}?token=${Session.data.token}`).then(data => {
-      chargerMessages();
-    })
+function showEditFormMessage(message) {
+  message.edit = true;
+}
+
+function hideEditFormMessage(message) {
+  message.edit = false;
+  message.messageEdited = message.message;
+}
+
+function editMessage(message) {
+  if (message.messageEdited) {
+    let messageEdited = {
+      message: message.messageEdited,
+      token: Session.data.token,
+    };
+
+    api
+      .put(`channels/${route.params.id}/posts/${message.id}`, {
+        body: messageEdited,
+      })
+      .then((data) => {
+        loadMessages();
+      });
+    information.message = "";
+  } else {
+    error.value = "Vous ne pouvez pas envoyer de message vide.";
+  }
+}
+
+function deleteMessage(idMessage) {
+  if (confirm("Voulez-vous vraiment supprimer ce message ?")) {
+    api.delete(`channels/${route.params.id}/posts/${idMessage}?token=${Session.data.token}`).then((data) => {
+      loadMessages();
+    });
   }
 }
 
 onMounted(() => {
-  chargerChannel();
-  chargerMessages();
+  loadChannel();
+  loadMembers().then(() => {
+    loadMessages();
+  });
 });
 </script>
 
@@ -82,32 +121,45 @@ onMounted(() => {
     <Alert v-if="error" type="error" :message="error" />
     <h1>{{ conversation.channel.label }}</h1>
     <div id="list-convs">
-      <template
-        v-if="conversation.messages.length"
-        v-for="(message, index) in conversation.messages"
-      >
+      <template v-if="conversation.messages.length" v-for="(message, index) in conversation.messages">
         <div class="message">
           <div class="member">
             <img
-              :src="
-                'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' +
-                'John Doe'
-              "
+              :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + message.member.fullname"
               alt="photo de profile"
             />
-            <p class="fullname">John Doe</p>
-            <p class="email">john.doe@example.org</p>
+            <RouterLink class="fullname" :to="'/profile/'+ message.member.id">{{ message.member.fullname }}</RouterLink>
+            <p class="email">{{ message.member.email }}</p>
             <p class="date">{{ message.date }}</p>
           </div>
           <div class="data">
-            <p>
-              {{ message.message }}
-            </p>
+            <template v-if="!message.edit">
+              <p>
+                {{ message.message }}
+              </p>
+            </template>
+            <template v-else>
+              <form @submit.prevent="editMessage(message)">
+                <div class="form-group">
+                  <textarea v-model="message.messageEdited" require />
+                  <div class="list-button">
+                    <button class="btn-primary">Modifier le message</button>
+                  </div>
+                </div>
+              </form>
+            </template>
           </div>
           <div class="list-buttons">
-            <button class="btn-primary" @click="deleteMember(message.id)">
-              <icon-EditPencil />
-            </button>
+            <template v-if="!message.edit">
+              <button class="btn-primary" @click="showEditFormMessage(message)">
+                <icon-EditPencil />
+              </button>
+            </template>
+            <template v-else>
+              <button class="btn-primary" @click="hideEditFormMessage(message)">
+                <icon-Cross />
+              </button>
+            </template>
             <button class="btn-danger" @click="deleteMessage(message.id)">
               <icon-Trash />
             </button>
@@ -120,11 +172,7 @@ onMounted(() => {
 
       <form @submit.prevent="postMessage">
         <div class="form-group">
-          <textarea
-            v-model="information.message"
-            placeholder="Bonjour..."
-            require
-          />
+          <textarea v-model="information.message" placeholder="Bonjour..." require />
           <div class="list-button">
             <button class="btn-primary">Envoyer le message</button>
           </div>
@@ -187,7 +235,7 @@ $background-color: hsl(231, 100%, 10%);
       }
     }
 
-    .list-buttons{
+    .list-buttons {
       opacity: 0;
       position: absolute;
       top: 10px;
@@ -197,9 +245,9 @@ $background-color: hsl(231, 100%, 10%);
       gap: 10px;
     }
 
-    &:hover .list-buttons{
+    &:hover .list-buttons {
       opacity: 1;
-      transition: all .2s ease;
+      transition: all 0.2s ease;
     }
   }
 }

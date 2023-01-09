@@ -20,7 +20,7 @@ a{
 }
 
 form{
-  margin:auto;
+  margin:0 auto;
   width: 80%;
   max-width: 500px;
   display: flex;

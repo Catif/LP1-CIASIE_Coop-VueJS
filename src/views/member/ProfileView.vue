@@ -1,19 +1,26 @@
 <script setup>
-const Route = inject('route');
-const Session = inject('session');
+const Route = inject("route");
+const Session = inject("session");
 
 const member = ref(false);
 
-api.get("members").then((data) => {
-  member.value = data.find((member) => member.id === Route.params.id);
-  let date = new Date(member.value.created_at);
-  member.value.created_at = [
-    date.getDate(),
-    date.getMonth(),
-    date.getFullYear(),
-  ].join("/");
-  console.dir(member.value);
+watch(Route, (to) => {
+  loadMember()
 });
+
+function loadMember() {
+  api.get("members").then((data) => {
+    if (Route.params.id) {
+      member.value = data.find((member) => member.id === Route.params.id);
+    } else {
+      member.value = Session.data.member;
+    }
+    let date = new Date(member.value.created_at);
+    member.value.created_atFormated = [date.getDate(), date.getMonth(), date.getFullYear()].join("/");
+  });
+}
+
+loadMember()
 </script>
 
 <template>
@@ -25,10 +32,7 @@ api.get("members").then((data) => {
       <div id="Profile">
         <div id="Information">
           <img
-            :src="
-              'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' +
-              member.fullname
-            "
+            :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + member.fullname"
             alt="photo de profile"
           />
           <p><span>Nom complet :</span> {{ member.fullname }}</p>
@@ -36,7 +40,7 @@ api.get("members").then((data) => {
             <span>Email :</span>
             <a :href="'mailto=' + member.email">{{ member.email }}</a>
           </p>
-          <p><span>Date de création :</span> {{ member.created_at }}</p>
+          <p><span>Date de création :</span> {{ member.created_atFormated }}</p>
         </div>
         <div id="Last-Messages">
           <h2>Liste des derniers messages :</h2>
@@ -44,10 +48,8 @@ api.get("members").then((data) => {
             <template v-for="i in 5">
               <div class="message">
                 <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Quibusdam temporibus cum voluptatibus autem eum, eius sunt
-                  voluptatum officiis eveniet reprehenderit aut pariatur sint
-                  facere ex aperiam id ab distinctio veniam!
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam temporibus cum voluptatibus autem eum, eius sunt
+                  voluptatum officiis eveniet reprehenderit aut pariatur sint facere ex aperiam id ab distinctio veniam!
                 </p>
                 <div>
                   <p>NomConversation</p>
