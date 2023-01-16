@@ -12,13 +12,13 @@ api.get("channels?token=" + Session.data.token).then((data) => {
 });
 
 const deleteConv = (id) => {
-  if (confirm("Voulez-vous vraiment supprimer ce membre ?")) {
+  if (confirm("Voulez-vous vraiment supprimer cete conversation ?")) {
     api
       .delete(`channels/${id}`, { body: { token: Session.data.token } })
       .then((data) => {
         listConvs.value.splice(listConvs.value.findIndex(element => element.id === id), 1);
 
-        if (listConvs.length === 0){
+        if (listConvs.value.length === 0){
           message.value = "Aucune conversation pour le moment.";
         }
       });
