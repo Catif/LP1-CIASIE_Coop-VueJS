@@ -5,11 +5,13 @@ const Session = inject("session");
 const member = ref(false);
 
 watch(Route, (to) => {
-  loadMember()
+  loadMember().then(() => 
+    loadLastMessages()
+  )
 });
 
 function loadMember() {
-  api.get("members").then((data) => {
+  return api.get("members").then((data) => {
     if (Route.params.id) {
       member.value = data.find((member) => member.id === Route.params.id);
     } else {
@@ -17,6 +19,39 @@ function loadMember() {
     }
     let date = new Date(member.value.created_at);
     member.value.created_atFormated = [date.getDate(), date.getMonth(), date.getFullYear()].join("/");
+  });
+}
+
+function loadLastMessages() {
+  let numberMessage = 10;
+  api.get(`channels?token=${Session.data.token}`).then((data) => {
+    let channels = data.filter((channel) => channel.members.find((member) => member.id === member.value.id));
+    channels.map((channel) => {
+      api.get(`channels/${channel.id}/posts?token=${Session.data.token}`).then((data) => {
+        if (data.length) {
+          data.map((el) => {
+            el.member = channel.members.find((member) => member.id == el.member_id);
+            el.dateLong = new Date(el.created_at).toLocaleTimeString("fr-FR", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            el.dateShort = new Date(el.created_at).toLocaleTimeString("fr-FR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
+          });
+          conversation.messages = data;
+        }
+      });
+    });
   });
 }
 

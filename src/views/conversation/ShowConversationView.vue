@@ -46,6 +46,26 @@ function loadMessages() {
           minute: "2-digit",
           second: "2-digit",
         });
+        if(el.modified_at === el.created_at){
+          el.dateEditedLong = null;
+        } else {
+          el.dateEditedLong = new Date(el.modified_at).toLocaleTimeString("fr-FR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          el.dateEditedShort = new Date(el.modified_at).toLocaleTimeString("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+        }
         el.edit = false;
         el.messageEdited = el.message;
       });
@@ -53,6 +73,7 @@ function loadMessages() {
     } else {
       message.value = "Aucune message pour le moment.";
     }
+    console.log(conversation.messages)
   });
 }
 
@@ -133,21 +154,27 @@ onMounted(() => {
         <div class="message">
           <div class="member">
             <div>
-              <img
-                :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + message.member.fullname"
-                alt="photo de profile"
-              />
+              <RouterLink class="fullname" :to="'/profile/' + message.member.id"
+                ><img
+                  :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + message.member.fullname"
+                  alt="photo de profile"
+              /></RouterLink>
               <div>
-                <RouterLink class="fullname" :to="'/profile/'+ message.member.id">{{ message.member.fullname }}</RouterLink>
-                <p class="email">{{ message.member.email }}</p>
+                <RouterLink class="fullname" :to="'/profile/' + message.member.id">{{ message.member.fullname }} </RouterLink>
+                <RouterLink class="email" :to="'/profile/' + message.member.id">{{ message.member.email }}</RouterLink>
               </div>
             </div>
-            <p class="date" :title="message.dateShort">{{ message.dateLong }}</p>
+            <div class="date">
+              <p class="date" :title="message.dateShort">{{ message.dateLong }}</p>
+              <template v-if="message.dateEditedLong">
+                  <p class="date" :title="message.dateEditedShort"><icon-EditPencil /> {{ message.dateEditedLong }}</p>
+              </template>
+            </div>
           </div>
+          <hr />
           <div class="data">
             <template v-if="!message.edit">
-              <p v-html="message.message">
-              </p>
+              <p v-html="message.message"></p>
             </template>
             <template v-else>
               <form @submit.prevent="editMessage(message)">
@@ -217,20 +244,27 @@ $background-color: hsl(231, 100%, 10%);
     align-items: stretch;
     gap: 10px;
 
+    hr {
+      border: 1px solid darker($color, 40);
+      border-top: none;
+      width: 100%;
+    }
+
     .member {
       display: flex;
       align-items: center;
       justify-content: space-between;
 
-      &>div{
+      & > div {
         display: flex;
         gap: 10px;
-        
+
         img {
           max-width: 50px;
           border-radius: 5px;
-        }  
-        &>div{
+        }
+
+        & > div {
           display: flex;
           flex-direction: column;
           justify-content: space-around;
@@ -239,14 +273,37 @@ $background-color: hsl(231, 100%, 10%);
             color: $color;
             font-size: 18px;
           }
+
           .email {
-            color: darken($color, 30%);
+            color: darken($color, 40%);
             font-size: 13px;
           }
         }
       }
-      .date {
-        font-size: 12px;
+
+      div.date{
+        display: flex;
+        flex-direction: column;
+
+        div{
+          display: flex;
+          gap: 5px;
+        }
+        p.date {
+          font-size: 12px;
+          text-align: right;          
+          svg{
+            position: relative;
+            top: 2px;
+            display:inline;
+            width: 12px;
+            height: 12px;
+          }
+
+          &:nth-child(2){
+            color: darken($color, 40%);
+          }
+        }
       }
     }
 
@@ -266,7 +323,7 @@ $background-color: hsl(231, 100%, 10%);
       top: 10px;
       right: 10px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
     }
 

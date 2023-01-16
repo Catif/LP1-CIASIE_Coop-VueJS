@@ -47,6 +47,11 @@ const router = createRouter({
       component: () => import("@/views/conversation/CreateConversationView.vue"),
     },
     {
+      path: "/edit-conversation/:id",
+      name: "edit-conversation",
+      component: () => import("@/views/conversation/EditConversationView.vue"),
+    },
+    {
       path: "/profile/:id?",
       name: "profile",
       component: () => import("@/views/member/ProfileView.vue"),

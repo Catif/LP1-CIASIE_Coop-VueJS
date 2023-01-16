@@ -1,5 +1,5 @@
 <script setup>
-const Session = inject('session');
+const Session = inject("session");
 const listConvs = ref([]);
 const message = ref("Chargement...");
 
@@ -13,15 +13,16 @@ api.get("channels?token=" + Session.data.token).then((data) => {
 
 const deleteConv = (id) => {
   if (confirm("Voulez-vous vraiment supprimer cete conversation ?")) {
-    api
-      .delete(`channels/${id}`, { body: { token: Session.data.token } })
-      .then((data) => {
-        listConvs.value.splice(listConvs.value.findIndex(element => element.id === id), 1);
+    api.delete(`channels/${id}`, { body: { token: Session.data.token } }).then((data) => {
+      listConvs.value.splice(
+        listConvs.value.findIndex((element) => element.id === id),
+        1
+      );
 
-        if (listConvs.value.length === 0){
-          message.value = "Aucune conversation pour le moment.";
-        }
-      });
+      if (listConvs.value.length === 0) {
+        message.value = "Aucune conversation pour le moment.";
+      }
+    });
   }
 };
 </script>
@@ -30,9 +31,7 @@ const deleteConv = (id) => {
   <div>
     <h1>Liste des conversations</h1>
     <div id="list-convs">
-      <router-link to="/create-conversation" class="btn-primary"
-        >Créer une conversation</router-link
-      >
+      <router-link to="/create-conversation" class="btn-primary">Créer une conversation</router-link>
       <template v-if="listConvs.length" v-for="(conv, index) in listConvs">
         <div class="conv">
           <div class="information">
@@ -40,9 +39,10 @@ const deleteConv = (id) => {
             <p class="topic">{{ conv.topic }}</p>
           </div>
           <div class="buttons">
-            <router-link class="btn-primary" :to="'/conversation/' + conv.id"
-              >Ouvrir</router-link
-            >
+            <router-link class="btn-primary" :to="'/conversation/' + conv.id">Ouvrir</router-link>
+            <router-link :to="'/edit-conversation/' + conv.id" class="btn-primary">
+              <icon-EditPencil />
+            </router-link>
             <button class="btn-danger" @click="deleteConv(conv.id, index)">
               <icon-Trash />
             </button>
@@ -91,6 +91,11 @@ $background-color: hsl(231, 100%, 10%);
     .buttons {
       display: flex;
       gap: 10px;
+
+      &>*{
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
