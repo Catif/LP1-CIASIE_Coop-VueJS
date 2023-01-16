@@ -1,1 +1,92 @@
-@import './base.css';
+@import './reset.css';
+
+*{
+  font-family: Lato, Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.container{
+  width: 98%;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.container h1{
+  text-align: center;
+}
+
+a{
+  text-decoration: none;
+}
+
+form{
+  margin:0 auto;
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+form .form-group{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+form .form-group input{
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid hsl(212, 90%, 20%);
+}
+form .form-group textarea{
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid hsl(212, 90%, 20%);
+}
+form .list-button{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+.btn-primary{
+  display: inline-block;
+  background-color: hsl(212, 90%, 50%);
+  color: #E5E5E5;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px; 
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn-primary:hover{
+  background-color: hsl(212, 90%, 40%);
+}
+
+.btn-secondary{
+  display: inline-block;
+  background-color: hsl(212, 90%, 20%);
+  color: #E5E5E5;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn-secondary:hover{
+  background-color: hsl(212, 40%, 20%);
+}
+
+.btn-danger{
+  display: inline-block;
+  background-color: hsl(0, 100%, 40%);
+  color: #E5E5E5;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn-danger:hover{
+  background-color: hsl(0, 100%, 30%);
+}

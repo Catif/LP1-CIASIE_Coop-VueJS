@@ -1,15 +1,20 @@
 <script setup>
+import { useRouter, useRoute } from "vue-router";
+import { useSessionStore } from "@/stores/session";
+import mitt from "mitt";
+
+provide("router", useRouter());
+provide("route", useRoute());
+provide("session", useSessionStore());
+provide("bus", mitt());
 </script>
 
 <template>
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
- 
+  <header>
+    <Navbar />
+  </header>
 
-  <RouterView />
+  <RouterView class="container" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
