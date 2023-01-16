@@ -30,7 +30,15 @@ function loadMessages() {
       data.reverse();
       data.map((el) => {
         el.member = conversation.members.find((member) => member.id == el.member_id);
-        el.date = new Date(el.created_at).toLocaleTimeString("fr-FR", {
+        el.dateLong = new Date(el.created_at).toLocaleTimeString("fr-FR", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        el.dateShort = new Date(el.created_at).toLocaleTimeString("fr-FR", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
@@ -124,18 +132,21 @@ onMounted(() => {
       <template v-if="conversation.messages.length" v-for="(message, index) in conversation.messages">
         <div class="message">
           <div class="member">
-            <img
-              :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + message.member.fullname"
-              alt="photo de profile"
-            />
-            <RouterLink class="fullname" :to="'/profile/'+ message.member.id">{{ message.member.fullname }}</RouterLink>
-            <p class="email">{{ message.member.email }}</p>
-            <p class="date">{{ message.date }}</p>
+            <div>
+              <img
+                :src="'https://ui-avatars.com/api/?background=random&color=E5E5E5&size=300&name=' + message.member.fullname"
+                alt="photo de profile"
+              />
+              <div>
+                <RouterLink class="fullname" :to="'/profile/'+ message.member.id">{{ message.member.fullname }}</RouterLink>
+                <p class="email">{{ message.member.email }}</p>
+              </div>
+            </div>
+            <p class="date" :title="message.dateShort">{{ message.dateLong }}</p>
           </div>
           <div class="data">
             <template v-if="!message.edit">
-              <p>
-                {{ message.message }}
+              <p v-html="message.message">
               </p>
             </template>
             <template v-else>
@@ -202,23 +213,37 @@ $background-color: hsl(231, 100%, 10%);
     padding: 20px 20px;
     border-radius: 5px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: stretch;
-    gap: 20px;
+    gap: 10px;
 
     .member {
-      img {
-        max-width: 150px;
-        border-radius: 5px;
-        margin-bottom: 5px;
-      }
-      .fullname {
-        color: $color;
-        font-size: 18px;
-      }
-      .email {
-        color: darken($color, 30%);
-        font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      &>div{
+        display: flex;
+        gap: 10px;
+        
+        img {
+          max-width: 50px;
+          border-radius: 5px;
+        }  
+        &>div{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+
+          .fullname {
+            color: $color;
+            font-size: 18px;
+          }
+          .email {
+            color: darken($color, 30%);
+            font-size: 13px;
+          }
+        }
       }
       .date {
         font-size: 12px;
