@@ -20,12 +20,13 @@ a{
 }
 
 form{
-  margin:auto;
+  margin:0 auto;
   width: 80%;
   max-width: 500px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 }
 form .form-group{
   display: flex;
@@ -37,7 +38,11 @@ form .form-group input{
   border-radius: 5px;
   border: 1px solid hsl(212, 90%, 20%);
 }
-
+form .form-group textarea{
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid hsl(212, 90%, 20%);
+}
 form .list-button{
     display: flex;
     justify-content: center;

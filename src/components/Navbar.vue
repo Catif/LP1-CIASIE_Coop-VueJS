@@ -1,25 +1,25 @@
 <script setup>
-const user = useUserStore();
+const Session = inject('session');
 </script>
 
 <template>
   <nav>
     <div>
-      <RouterLink to="/">Accueil</RouterLink>
-      <template v-if="user.isConnected">
-        <RouterLink to="/members">Membres</RouterLink>
-        <RouterLink to="/">Conversations</RouterLink>
+      <router-link to="/">Accueil</router-link>
+      <template v-if="Session.data.token">
+        <router-link to="/members">Membres</router-link>
+        <router-link to="/conversations">Conversations</router-link>
       </template>
     </div>
 
     <div>
-      <template v-if="!user.isConnected">
-        <RouterLink to="/login">Connexion</RouterLink>
-        <RouterLink to="/register">Inscription</RouterLink>
+      <template v-if="!Session.data.token">
+        <router-link to="/login">Connexion</router-link>
+        <router-link to="/register">Inscription</router-link>
       </template>
-      <template v-if="user.isConnected">
-        <RouterLink to="/profile">Profil</RouterLink>
-        <RouterLink to="/logout">Déconnexion</RouterLink>
+      <template v-if="Session.data.token">
+        <router-link to="/profile">Profil</router-link>
+        <router-link to="/logout">Déconnexion</router-link>
       </template>
     </div>
   </nav>
