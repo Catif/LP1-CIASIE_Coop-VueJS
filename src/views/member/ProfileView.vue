@@ -5,9 +5,7 @@ const Session = inject("session");
 const member = ref(false);
 
 watch(Route, (to) => {
-  loadMember().then(() => 
-    loadLastMessages()
-  )
+  loadMember().then(() => loadLastMessages());
 });
 
 function loadMember() {
@@ -23,39 +21,10 @@ function loadMember() {
 }
 
 function loadLastMessages() {
-  let numberMessage = 10;
-  api.get(`channels?token=${Session.data.token}`).then((data) => {
-    let channels = data.filter((channel) => channel.members.find((member) => member.id === member.value.id));
-    channels.map((channel) => {
-      api.get(`channels/${channel.id}/posts?token=${Session.data.token}`).then((data) => {
-        if (data.length) {
-          data.map((el) => {
-            el.member = channel.members.find((member) => member.id == el.member_id);
-            el.dateLong = new Date(el.created_at).toLocaleTimeString("fr-FR", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-            el.dateShort = new Date(el.created_at).toLocaleTimeString("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            });
-          });
-          conversation.messages = data;
-        }
-      });
-    });
-  });
+  //! TO DO
 }
 
-loadMember()
+loadMember();
 </script>
 
 <template>
@@ -72,8 +41,7 @@ loadMember()
           />
           <p><span>Nom complet :</span> {{ member.fullname }}</p>
           <p>
-            <span>Email :</span>
-            <a :href="'mailto=' + member.email">{{ member.email }}</a>
+            <span>Email :</span> <a :href="'mailto=' + member.email">{{ member.email }}</a>
           </p>
           <p><span>Date de création :</span> {{ member.created_atFormated }}</p>
         </div>
