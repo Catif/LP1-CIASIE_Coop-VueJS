@@ -59,7 +59,6 @@ const router = createRouter({
   ],
 });
 
-
 router.beforeEach(async (from, to, next) => {
   const Session = useSessionStore();
 
@@ -70,10 +69,10 @@ router.beforeEach(async (from, to, next) => {
   // console.log(!(await Session.isValid()))
   // console.log("====================================")
   if (!["/", "/register", "/login"].includes(from.path) && !(await Session.isValid())) {
-    next('/login')
-    return
+    next("/login");
+    return;
   }
-  next()
+  next();
 });
 
 export default router;

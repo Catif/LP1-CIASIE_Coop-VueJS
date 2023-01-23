@@ -48,9 +48,7 @@ let login = () => {
       </div>
       <div class="list-button">
         <button class="btn-primary">Connexion</button>
-        <router-link to="/register" class="btn-secondary"
-          >Pas de compte ?</router-link
-        >
+        <router-link to="/register" class="btn-secondary">Pas de compte ?</router-link>
       </div>
     </form>
   </div>
