@@ -9,26 +9,26 @@ const information = reactive({
 
 const error = ref("");
 
-let login = () => {
-  if (information.email && information.password) {
-    error.value = "";
-    api
-      .post("members/signin", { body: information })
-      .then((data) => {
-        if (data.message) {
-          error.value = data.message;
-        } else {
-          Session.setSession(data.member, data.token);
-          router.push("/");
-        }
-      })
-      .catch((errorRes) => {
-        error.value = errorRes;
-      });
-  } else {
-    error.value = "Tous les champs ne sont pas remplie";
+function login() {
+  if (!information.email && !information.password) {
+    error.value = "Tous les champs ne sont pas remplie.";
+    return false;
   }
-};
+
+  api
+    .post("members/signin", { body: information })
+    .then((data) => {
+      if (data.message) {
+        error.value = data.message;
+      } else {
+        Session.setSession(data.member, data.token);
+        router.push("/");
+      }
+    })
+    .catch((errorRes) => {
+      error.value = errorRes;
+    });
+}
 </script>
 
 <template>

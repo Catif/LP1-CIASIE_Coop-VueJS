@@ -1,6 +1,6 @@
 <script setup>
-const router = inject('router');
-const Session = inject('session');
+const router = inject("router");
+const Session = inject("session");
 
 const information = reactive({
   label: "",
@@ -10,14 +10,14 @@ const information = reactive({
 const error = ref("");
 
 const createConv = () => {
-  api.post('channels', {body: information}).then(data => {
+  api.post("channels", { body: information }).then((data) => {
     if (data.message) {
       error.value = data.message;
     } else {
       router.push("/conversation/" + data.id);
     }
-  })
-}
+  });
+};
 </script>
 
 <template>
@@ -37,9 +37,7 @@ const createConv = () => {
       </div>
       <div class="list-button">
         <button class="btn-primary">Créer</button>
-        <router-link to="/conversations" class="btn-secondary"
-          >Annuler</router-link
-        >
+        <router-link to="/conversations" class="btn-secondary">Annuler</router-link>
       </div>
     </form>
   </div>

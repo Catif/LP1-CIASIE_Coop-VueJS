@@ -1,6 +1,4 @@
 <script setup>
-import Message from "@/components/Message.vue";
-
 const router = inject("router");
 const route = inject("route");
 const Session = inject("session");

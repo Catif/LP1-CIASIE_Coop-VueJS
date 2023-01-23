@@ -121,16 +121,16 @@ function hideEditFormMessage() {
     <div v-if="props.canEdit" class="list-buttons">
       <template v-if="!props.message.edit">
         <button class="btn-primary" @click="showEditFormMessage()">
-          <icon-EditPencil />
+          <i class="bi bi-pencil-square"></i>
         </button>
       </template>
       <template v-else>
         <button class="btn-primary" @click="hideEditFormMessage()">
-          <icon-Cross />
+          <i class="bi bi-x-lg"></i>
         </button>
       </template>
       <button class="btn-danger" @click="deleteMessage()">
-        <icon-Trash />
+        <i class="bi bi-trash-fill"></i>
       </button>
     </div>
   </div>
