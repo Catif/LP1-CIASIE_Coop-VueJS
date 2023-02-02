@@ -41,10 +41,10 @@ const deleteConv = (id) => {
           <div class="buttons">
             <router-link class="btn-primary" :to="'/conversation/' + conv.id">Ouvrir</router-link>
             <router-link :to="'/edit-conversation/' + conv.id" class="btn-primary">
-              <icon-EditPencil />
+              <i class="bi bi-pencil-square"></i>
             </router-link>
             <button class="btn-danger" @click="deleteConv(conv.id, index)">
-              <icon-Trash />
+              <i class="bi bi-trash-fill"></i>
             </button>
           </div>
         </div>
@@ -92,7 +92,7 @@ $background-color: hsl(231, 100%, 10%);
       display: flex;
       gap: 10px;
 
-      &>*{
+      & > * {
         display: flex;
         align-items: center;
       }
