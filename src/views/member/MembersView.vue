@@ -1,12 +1,12 @@
 <script setup>
-const Session = inject('session');
+const Session = inject("session");
 
 const listMembers = ref([]);
-const message = ref('Chargement...')
+const message = ref("Chargement...");
 
 api.get("members?token=" + Session.data.token).then((data) => {
-  if (data.length === 0){
-    message.value = 'Il n\'existe aucune membre'
+  if (data.length === 0) {
+    message.value = "Il n'existe aucune membre";
   } else {
     listMembers.value = data;
   }
@@ -15,11 +15,12 @@ api.get("members?token=" + Session.data.token).then((data) => {
 const deleteMember = (id, index) => {
   if (Session.data.member.id != id) {
     if (confirm("Voulez-vous vraiment supprimer ce membre ?")) {
-      api
-        .delete(`members/${id}`, { body: { token: Session.data.token } })
-        .then((data) => {
-          listMembers.value.splice(listMembers.value.findIndex(element => element.id === id), 1);
-        });
+      api.delete(`members/${id}`, { body: { token: Session.data.token } }).then((data) => {
+        listMembers.value.splice(
+          listMembers.value.findIndex((element) => element.id === id),
+          1
+        );
+      });
     }
   } else {
     alert("Mais... C'est vous !");
@@ -31,27 +32,22 @@ const deleteMember = (id, index) => {
   <div>
     <h1>Liste des membres</h1>
     <div id="list-member">
-      <template
-        v-if="listMembers.length"
-        v-for="(member, index) in listMembers"
-      >
+      <template v-if="listMembers.length" v-for="(member, index) in listMembers">
         <div class="member">
           <div class="information">
             <p class="fullname">{{ member.fullname }}</p>
             <p class="email">{{ member.email }}</p>
           </div>
           <div class="buttons">
-            <RouterLink class="btn-primary" :to="'/profile/' + member.id"
-              >Voir</RouterLink
-            >
+            <RouterLink class="btn-primary" :to="'/profile/' + member.id">Voir</RouterLink>
             <button class="btn-danger" @click="deleteMember(member.id, index)">
-              <icon-Trash />
+              <i class="bi bi-trash-fill"></i>
             </button>
           </div>
         </div>
       </template>
       <template v-else>
-        <p>{{message}}</p>
+        <p>{{ message }}</p>
       </template>
     </div>
   </div>
