@@ -62,14 +62,11 @@ const router = createRouter({
 router.beforeEach(async (from, to, next) => {
   const Session = useSessionStore();
 
-  //? _-== Test redirection Role Access ==-_
-
-  // console.log("====================================")
-  // console.log(!["/", "/register", "/login"].includes(from.path))
-  // console.log(!(await Session.isValid()))
-  // console.log("====================================")
   if (!["/", "/register", "/login"].includes(from.path) && !(await Session.isValid())) {
     next("/login");
+    return;
+  } else if (["/register", "/login"].includes(from.path) && (await Session.isValid())) {
+    next("/");
     return;
   }
   next();

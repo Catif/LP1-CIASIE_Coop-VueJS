@@ -98,7 +98,7 @@ function hideEditFormMessage() {
       <div class="date">
         <p class="date" :title="props.message.dateShort">{{ props.message.dateLong }}</p>
         <template v-if="props.message.dateEditedLong">
-          <p class="date" :title="props.message.dateEditedShort"><icon-EditPencil /> {{ props.message.dateEditedLong }}</p>
+          <p class="date" :title="props.message.dateEditedShort"><i class="bi bi-pencil-square"></i> {{ props.message.dateEditedLong }}</p>
         </template>
       </div>
     </div>

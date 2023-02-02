@@ -16,7 +16,9 @@ function loadMember() {
       member.value = Session.data.member;
     }
     let date = new Date(member.value.created_at);
-    member.value.created_atFormated = [date.getDate(), date.getMonth(), date.getFullYear()].join("/");
+    member.value.created_atFormated = [("0" + date.getDate()).slice(-2), ("0" + date.getMonth()).slice(-2), date.getFullYear()].join("/");
+
+    member.value.email = member.value.email.toLowerCase();
   });
 }
 
