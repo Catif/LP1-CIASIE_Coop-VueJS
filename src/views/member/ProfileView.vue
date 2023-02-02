@@ -22,10 +22,6 @@ function loadMember() {
   });
 }
 
-function loadLastMessages() {
-  //! TO DO
-}
-
 loadMember();
 </script>
 

@@ -91,7 +91,7 @@ $background-color: hsl(231, 100%, 10%);
     .buttons {
       display: flex;
       gap: 10px;
-
+      
       & > * {
         display: flex;
         align-items: center;
